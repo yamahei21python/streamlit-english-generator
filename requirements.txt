@@ -1,4 +1,9 @@
 streamlit
-pandas
-requests
-beautifulsoup4
+gtts
+pydub
+Pillow
+janome
+tqdm
+moviepy==1.0.3
+imageio==2.22.2
+imageio-ffmpeg==0.4.7
