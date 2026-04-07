@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium English Generator | Mockup</title>
+    <!-- Geist-like Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --text: #171717;
+            --text-muted: #666666;
+            --border-shadow: 0px 0px 0px 1px rgba(0,0,0,0.08);
+            --border-hover: 0px 0px 0px 1px rgba(0,0,0,0.16);
+            --accent: #0a72ef;
+            --accent-hover: #0060d6;
+            --radius: 8px;
+            --shadow-card: 0px 0px 0px 1px rgba(0,0,0,0.08), 0px 2px 4px rgba(0,0,0,0.04);
+            --font-geist: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-geist);
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 24px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 10;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-box {
+            width: 24px;
+            height: 24px;
+            background: var(--text);
+            border-radius: 4px;
+        }
+
+        nav {
+            display: flex;
+            gap: 24px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        nav a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.1s;
+        }
+
+        nav a:hover {
+            color: var(--text);
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 600;
+            letter-spacing: -0.05em;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 48px;
+            text-align: center;
+            letter-spacing: -0.01em;
+        }
+
+        /* Player Card */
+        .player-card {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-card);
+            padding: 64px 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #fafafa;
+        }
+
+        .player-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #0a72ef, #de1d8d, #ff5b4f);
+            opacity: 0.8;
+        }
+
+        .status-badge {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            background: #ebf5ff;
+            color: #0068d6;
+            margin-bottom: 32px;
+        }
+
+        .sentence-jp {
+            font-size: 2.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .sentence-en {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            letter-spacing: -0.01em;
+            opacity: 0;
+            animation: fadeIn 0.8s 1s ease forwards;
+        }
+
+        @keyframes slideUpFade {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Input Deck */
+        .input-deck {
+            width: 100%;
+            max-width: 800px;
+            margin-top: 32px;
+        }
+
+        .input-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--border-shadow);
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            transition: box-shadow 0.2s;
+        }
+
+        .input-container:focus-within {
+            box-shadow: 0px 0px 0px 2px rgba(10, 114, 239, 0.2), 0px 0px 0px 1px var(--accent);
+        }
+
+        textarea {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 12px 16px;
+            font-size: 15px;
+            font-family: inherit;
+            resize: none;
+            height: 100px;
+            color: var(--text);
+        }
+
+        textarea::placeholder {
+            color: #a0a0a0;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        .settings {
+            display: flex;
+            gap: 12px;
+        }
+
+        .setting-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            box-shadow: var(--border-shadow);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .setting-pill:hover {
+            background: #fafafa;
+        }
+
+        .btn-primary {
+            background: var(--text);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: opacity 0.1s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .shortcut {
+            font-size: 11px;
+            opacity: 0.5;
+            background: rgba(255,255,255,0.2);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        footer {
+            padding: 40px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(0,0,0,0.06);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <div class="logo-box"></div>
+            LANGUAGELAB
+        </div>
+        <nav>
+            <a href="#">Practice</a>
+            <a href="#">Settings</a>
+            <a href="#">Account</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="hero-title">Practice Player</h1>
+        <p class="hero-subtitle">Elevate your English skills with premium audio and animations.</p>
+
+        <div class="player-card">
+            <div class="status-badge">Daily Conversation (B1)</div>
+            <div class="sentence-jp">ここで働いてどれくらいになりますか？</div>
+            <div class="sentence-en">How long have you been working here?</div>
+            
+            <div style="margin-top: 48px; width: 100%; background: #f5f5f5; height: 6px; border-radius: 3px; overflow: hidden;">
+                <div style="width: 45%; height: 100%; background: var(--text); border-radius: 3px;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 8px; font-size: 12px; font-weight: 500; color: var(--text-muted);">
+                <span>0:09</span>
+                <span>0:18</span>
+            </div>
+        </div>
+
+        <div class="input-deck">
+            <div class="input-container">
+                <textarea placeholder="例: こんにちは,Hello.&#10;これはペンです,This is a pen."></textarea>
+            </div>
+            <div class="controls">
+                <div class="settings">
+                    <div class="setting-pill">
+                        <span>Voice: Nanami</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </div>
+                    <div class="setting-pill">
+                        <span>Reps: 3x</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="alert('Session Started!')">
+                    Start Session
+                    <span class="shortcut">↵ Enter</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2026 LanguageLab. Built with Geist Design System.
+    </footer>
+
+</body>
+</html>
