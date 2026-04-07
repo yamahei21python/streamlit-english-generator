@@ -287,7 +287,7 @@ export default function LandingPage() {
 
         {/* CTA Section */}
         <section className="flex w-full flex-col items-center justify-center px-6 pt-16 pb-32 text-center md:px-10">
-          <h2 className="mb-10 text-5xl font-black tracking-tighter md:text-7xl italic">Lets FlashSpeak!</h2>
+          <h2 className="mb-10 text-5xl font-black tracking-tighter md:text-7xl italic">Let&apos;s FlashSpeak!</h2>
           <Link
             href="/app"
             className="flex h-14 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#0a72ef] via-[#de1d8d] to-[#ff5b4f] px-10 text-base font-semibold text-white transition-all hover:scale-105 shadow-xl shadow-[#0a72ef]/20"

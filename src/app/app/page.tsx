@@ -38,8 +38,8 @@ const VOICES_EN = [
 ];
 
 export default function Home() {
-  const [jpText, setJpText] = useState("ここで働いてどれくらいになりますか？\nこれはペンです");
-  const [enText, setEnText] = useState("How long have you been working here?\nThis is a pen.");
+  const [jpText, setJpText] = useState("ここで働いてどれくらいになりますか？\n明日の会議は何時からですか？");
+  const [enText, setEnText] = useState("How long have you been working here?\nWhat time is the meeting tomorrow?");
   const [isTranslating, setIsTranslating] = useState(false);
   const [sentencePairs, setSentencePairs] = useState<SentencePair[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -373,7 +373,7 @@ export default function Home() {
                 <span>Overall Progress</span>
                 <span>Sentence {isPlaying ? currentIndex + 1 : completedIndex} / {sentencePairs.length}</span>
               </div>
-              <div className="h-5 w-full overflow-hidden rounded-full bg-[#f5f5f5]">
+              <div className="h-2 w-full overflow-hidden rounded-full bg-[#f5f5f5]">
                 <motion.div 
                   className="h-full bg-[#171717]" 
                   initial={{ width: 0 }}
@@ -441,7 +441,7 @@ export default function Home() {
               <button
                 onClick={handleTranslate}
                 disabled={isTranslating || !jpText.trim() || isPlaying}
-                className="flex w-[160px] items-center justify-center gap-2 rounded-md bg-[#171717] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 active:scale-[0.98] disabled:opacity-20"
+                className="flex flex-1 items-center justify-center gap-2 rounded-md bg-[#171717] px-4 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90 active:scale-[0.98] disabled:opacity-20"
               >
                 {isTranslating ? <Loader2 className="h-4 w-4 animate-spin shrink-0" /> : <Languages className="h-4 w-4 shrink-0" />}
                 <span className="truncate">{isTranslating ? "Translating..." : "Auto Translate"}</span>
@@ -449,7 +449,7 @@ export default function Home() {
               <button
                 onClick={startSession}
                 disabled={sentencePairs.length === 0 || isPlaying || isExporting}
-                className="flex w-[160px] items-center justify-center gap-2 rounded-md bg-[#171717] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 active:scale-[0.98] disabled:opacity-20"
+                className="flex flex-1 items-center justify-center gap-2 rounded-md bg-[#171717] px-4 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90 active:scale-[0.98] disabled:opacity-20"
               >
                 <Play className="h-4 w-4 shrink-0 fill-current" />
                 <span className="truncate">Start Session</span>
@@ -457,7 +457,7 @@ export default function Home() {
               <button
                 onClick={handleExportMP4}
                 disabled={sentencePairs.length === 0 || isPlaying || isExporting}
-                className="relative flex w-[160px] items-center justify-center gap-2 overflow-hidden rounded-md bg-[#171717] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 active:scale-[0.98] disabled:opacity-20"
+                className="relative flex flex-1 items-center justify-center gap-2 overflow-hidden rounded-md bg-[#171717] px-4 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90 active:scale-[0.98] disabled:opacity-20"
               >
                 {isExporting ? (
                   <div className="flex items-center gap-2">
@@ -487,7 +487,7 @@ export default function Home() {
                 value={jpText}
                 onChange={(e) => setJpText(e.target.value)}
                 disabled={isPlaying}
-                placeholder="Japanese (one per line)&#10;例：ここで働いてどれくらいになりますか？"
+                placeholder="Japanese (one per line)&#10;例：ここで働いてどれくらいになりますか？&#10;明日の会議は何時からですか？"
                 className="h-44 w-full resize-none border-none bg-transparent p-4 text-[15px] outline-none leading-relaxed disabled:opacity-50"
               />
             </div>
@@ -496,7 +496,7 @@ export default function Home() {
                 value={enText}
                 onChange={(e) => setEnText(e.target.value)}
                 disabled={isPlaying}
-                placeholder="English (auto-translates)&#10;Ex: How long have you been working here?"
+                placeholder="English (auto-translates)&#10;Ex: How long have you been working here?&#10;What time is the meeting tomorrow?"
                 className="h-44 w-full resize-none border-none bg-transparent p-4 text-[15px] outline-none leading-relaxed disabled:opacity-50"
               />
             </div>
