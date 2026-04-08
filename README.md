@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FlashSpeak Architecture
 
-## Getting Started
+FlashSpeak は、瞬間英作文とシャドーイングに特化した語学学習プラットフォームです。AIを活用した即時翻訳と、高品質なテキスト合成音声（TTS）による反復再生ロジックを統合し、学習のインプットからアウトプット（動画生成）までをシームレスに提供するモダンなウェブアーキテクチャを採用しています。
 
-First, run the development server:
+## 🛠 Technology Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Frontend Framework
+- **Next.js (App Router)**: ルーティングとサーバー/クライアントの境界管理に App Router を採用。開発・ビルド環境には Turbopack を利用し、最適化されたコンパイルプロセスを実現。
+- **React**: 状態管理とライフサイクル制御。特に、SSR（Server-Side Rendering）とクライアントの描画同期を保証するための厳密なマウントライフサイクル管理を実装し、本番環境におけるハイドレーションの不整合を排除。
+- **Tailwind CSS**: ユーティリティクラスによる保守性の高いスタイリング。時間やカウンターなど動的に変化する描画領域には等幅フォント制御（`tabular-nums`）を適用し、パフォーマンスを損なわずにレイアウトシフトを防止する設計。
+- **Framer Motion**: ハードウェアアクセラレーションを活用した宣言的アニメーション。スクロールに連動したパララックス効果や、再生状態に追従するプログレスバーのタイムライン制御を担当。
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Media Processing Engine (Client-Side)
+- **Web Audio API**: 音声データの非同期フェッチ、ArrayBuffer からのデコード、および複数の音声チャンク・無音区間の結合処理を実装。遅延のないシームレスなオーディオ再生パイプラインを構築。
+- **Video Encoding**: `Mediabunny` ライブラリを利用した、ブラウザ上での MP4 エンコーディング。サーバーリソースに依存せず、セキュアかつ高速な動画生成を実現。
+- **Canvas Rendering Pipeline**: Canvas API を用いたフレームごとのテキストアセット描画。オーディオの再生尺と完全に同期した動的なステート管理により、タイムラインに沿った視覚情報の切り替え（テキストのアクティブ・非アクティブ状態の継続維持）を統制。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Serverless API Integration
+- **Translation Endpoint (`/api/translate`)**: ユーザー入力から自然な英文脈を瞬時に生成するAI翻訳プロキシ。
+- **Text-to-Speech Endpoint (`/api/tts`)**: 複数のリージョン・性別を持たせた Neural TTS モデルとの通信インターフェース。指定されたテキストとボイスプロファイルからオーディオストリームを動的にフェッチ。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📂 System Routing
 
-## Learn More
+ユーザージャーニーを最適化するため、利用頻度に基づいたフラットなルーティング設計を採用しています。
 
-To learn more about Next.js, take a look at the following resources:
+- **`/` (Core Application)**: サービスのメイン機能（入力・翻訳・再生・エクスポート）が集約されたアプリケーション領域。リピーターがアクセス後すぐにアクションを起こせる設計。
+- **`/lp` (Landing Page)**: サービスの価値提案とユースケースを視覚的なストーリーボードとして提示するコンテンツ領域。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ⚙️ Deployment Strategy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+本システムは Vercel などのエッジネットワークを備えたサーバーレスプラットフォームでの稼働に最適化されています。機密性の高い通信を伴う API ルートのサーバー処理と、クライアントサイドでのヘビーなメディアレンダリング処理を分離することで、クラウドインフラストラクチャの負荷低減とスケーラビリティを担保しています。
