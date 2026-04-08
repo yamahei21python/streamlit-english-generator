@@ -27,7 +27,7 @@ export default function Header({ showStartButton = false, position = "fixed" }: 
       <div className="flex items-center gap-4">
         {showStartButton && (
           <Link
-            href="/app"
+            href="/"
             className={`flex items-center gap-2 rounded-full ${hasMounted ? "bg-[#262626]" : "bg-[#171717]"} px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 active:scale-95`}
           >
             <span>はじめる</span>
