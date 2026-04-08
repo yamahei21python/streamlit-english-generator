@@ -1,27 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { Brain, Zap, Video, Download, Check, ChevronRight } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export default function LandingPage() {
+  const [hasMounted, setHasMounted] = useState(false);
   const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start center", "end center"]
-  });
 
-  const scaleY = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-white text-[#171717] selection:bg-[#79ffe1] selection:text-black">
+    <div className="min-h-screen bg-white text-[#262626] selection:bg-[#79ffe1] selection:text-black">
       <Header showStartButton />
 
       <main className="flex flex-col items-center">
@@ -35,14 +30,14 @@ export default function LandingPage() {
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
             <h1 className="mb-6 text-5xl font-black tracking-tighter sm:text-7xl md:text-8xl">
-              <span className="inline-block whitespace-nowrap">見た瞬間に、</span>
+              <span className="inline-block whitespace-nowrap">見た瞬間に</span>
               <br className="hidden md:block" />
               <span className="inline-block whitespace-nowrap">
-                英語が<span className="bg-gradient-to-r from-[#0a72ef] via-[#de1d8d] to-[#ff5b4f] bg-clip-text text-transparent">口から出る。</span>
+                英語が<span className="bg-gradient-to-r from-[#0a72ef] via-[#de1d8d] to-[#ff5b4f] bg-clip-text text-transparent">口から出る</span>
               </span>
             </h1>
             <p className="mx-auto mb-10 max-w-2xl text-lg text-[#666666] md:text-xl leading-relaxed">
-              FlashSpeakは、瞬間英作文とシャドーイングに特化した次世代の英語学習ツール。自分好みの設定で練習し、学習音声をそのまま学習動画として高速書き出し可能です。
+              FlashSpeakは、瞬間英作文とシャドーイングに特化<br />好みの設定で何度でも練習、動画作成が可能
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
@@ -62,19 +57,10 @@ export default function LandingPage() {
             <p className="mt-4 text-[#666666]">4つのステップで、あなたの英語学習を革新します。</p>
           </div>
 
-          {/* Vertical Connecting Line */}
-          <div className="absolute left-1/2 top-[350px] bottom-[200px] w-[2px] -translate-x-1/2 bg-black/[0.06] hidden md:block">
-            <motion.div
-              style={{ height: useSpring(useTransform(scrollYProgress, [0, 1], ["0%", "100%"]), { stiffness: 100, damping: 30 }) }}
-              className="absolute top-0 w-full overflow-hidden origin-top"
-            >
-              <div
-                className="absolute top-0 left-0 w-full h-[2000px] bg-gradient-to-b from-[#0a72ef] via-[#7447be] via-[#de1d8d] to-[#ff5b4f]"
-              />
-            </motion.div>
-          </div>
-
           <div className="flex flex-col gap-32 relative">
+            {/* Vertical Connecting Line (Isolated to Client-only sub-component to fix SSR hook order crash) */}
+            {hasMounted && <StoryboardVerticalLine containerRef={containerRef} />}
+
             {/* Step 1: Input & Translate */}
             <StoryboardStep
               step="01"
@@ -219,7 +205,7 @@ export default function LandingPage() {
             {/* Step 4: Export */}
             <StoryboardStep
               step="04"
-              title="動画を書き出し"
+              title="動画を作成"
               description="練習した成果を、SNSやYouTubeに最適な練習用動画としてエクスポート。オフラインでの復習やシェアに最適です。"
               reverse
             >
@@ -292,12 +278,39 @@ export default function LandingPage() {
             href="/app"
             className="flex h-14 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#0a72ef] via-[#de1d8d] to-[#ff5b4f] px-10 text-base font-semibold text-white transition-all hover:scale-105 shadow-xl shadow-[#0a72ef]/20"
           >
-            <span>無料で練習をはじめる</span>
+            <span>Try it for Free</span>
           </Link>
         </section>
       </main>
 
       <Footer />
+    </div>
+  );
+}
+
+function StoryboardVerticalLine({ containerRef }: { containerRef: React.RefObject<any> }) {
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end center"]
+  });
+
+  const springProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30
+  });
+
+  const clipPath = useTransform(
+    springProgress,
+    [0, 1],
+    ["inset(0 0 100% 0)", "inset(0 0 0% 0)"]
+  );
+
+  return (
+    <div className="absolute left-1/2 top-[48px] bottom-[-40px] w-[2px] -translate-x-1/2 bg-black/[0.06] hidden md:block">
+      <motion.div
+        style={{ clipPath }}
+        className="absolute inset-0 bg-gradient-to-b from-[#0a72ef] via-[#7447be] via-[#de1d8d] to-[#ff5b4f]"
+      />
     </div>
   );
 }
