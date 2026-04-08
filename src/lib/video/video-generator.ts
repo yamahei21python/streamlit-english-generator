@@ -120,6 +120,7 @@ export class VideoGenerator {
     let currentFrame = 0;
     let currentPairIndex = 0;
     let framesInCurrentSentence = 0;
+    let lastActiveType: 'jp' | 'en' | null = null;
 
     // Estimate total frames for progress
     const totalFrames = Math.ceil(finalAudio.duration * this.fps);
@@ -131,8 +132,13 @@ export class VideoGenerator {
       const audioBuffer = audioBuffers[currentPairIndex];
       const sentenceDurationInFrames = Math.ceil(audioBuffer.duration * this.fps);
 
+      // Update last active type if not silence
+      if (segment.type === 'jp' || segment.type === 'en') {
+        lastActiveType = segment.type;
+      }
+
       // Draw frame
-      this.drawFrame(ctx, segment.en, segment.jp, segment.type);
+      this.drawFrame(ctx, segment.en, segment.jp, segment.type, lastActiveType);
       
       // Feed frame to Mediabunny (timestamp and duration in seconds)
       await videoSource.add(currentFrame * frameGap, frameGap);
@@ -158,7 +164,7 @@ export class VideoGenerator {
     return new Blob([target.buffer], { type: 'video/mp4' });
   }
 
-  private drawFrame(ctx: CanvasRenderingContext2D, en: string, jp: string, type: 'jp' | 'en' | 'silence') {
+  private drawFrame(ctx: CanvasRenderingContext2D, en: string, jp: string, type: 'jp' | 'en' | 'silence', lastActiveType: 'jp' | 'en' | null) {
     // Background: Dark Gradient matching app aesthetic
     const grad = ctx.createLinearGradient(0, 0, 0, this.height);
     grad.addColorStop(0, '#1a1a1a');
@@ -171,8 +177,8 @@ export class VideoGenerator {
     ctx.fillRect(0, 0, this.width, 4);
 
     // English Text (Center)
-    const enActive = type === 'en';
-    const jpActive = type === 'jp';
+    const enActive = type === 'en' || (type === 'silence' && lastActiveType === 'en');
+    const jpActive = type === 'jp' || (type === 'silence' && lastActiveType === 'jp');
 
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
