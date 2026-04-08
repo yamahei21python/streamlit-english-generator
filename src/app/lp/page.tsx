@@ -17,7 +17,7 @@ export default function LandingPage() {
 
   return (
     <div className={`min-h-screen bg-white ${hasMounted ? "text-[#262626]" : "text-[#171717]"} selection:bg-[#79ffe1] selection:text-black`}>
-      <Header showStartButton />
+      <Header />
 
       <main className="flex flex-col items-center">
         {/* Hero Section */}
