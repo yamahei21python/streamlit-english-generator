@@ -32,8 +32,8 @@ export default function LandingPage() {
             <h1 className="mb-6 text-5xl font-black tracking-tighter sm:text-7xl md:text-8xl">
               <span className="inline-block whitespace-nowrap">{hasMounted ? "見た瞬間に" : "見た瞬間に、"}</span>
               <br className="hidden md:block" />
-              <span className="inline-block whitespace-nowrap">
-                英語が<span className="bg-gradient-to-r from-[#0a72ef] via-[#de1d8d] to-[#ff5b4f] bg-clip-text text-transparent">{hasMounted ? "口から出る" : "口から出る。"}</span>
+              <span className="inline-block whitespace-nowrap bg-gradient-to-r from-[#0a72ef] via-[#de1d8d] to-[#ff5b4f] bg-clip-text text-transparent">
+                {hasMounted ? "英語が喋れる" : "英語が喋れる。"}
               </span>
             </h1>
             <p className="mx-auto mb-10 max-w-2xl text-lg text-[#666666] md:text-xl leading-relaxed">
