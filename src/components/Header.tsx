@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useMounted } from "@/hooks/useMounted";
 
 interface HeaderProps {
   showStartButton?: boolean;
@@ -10,10 +9,7 @@ interface HeaderProps {
 }
 
 export default function Header({ showStartButton = false, position = "fixed" }: HeaderProps) {
-  const [hasMounted, setHasMounted] = useState(false);
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
+  const hasMounted = useMounted();
 
   return (
     <nav className={`${position} top-0 z-50 flex ${hasMounted ? "h-14" : "h-16"} w-full items-center justify-between border-b border-black/[0.06] bg-white/80 px-6 backdrop-blur-md md:px-10`}>

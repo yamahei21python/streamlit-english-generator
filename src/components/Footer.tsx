@@ -1,11 +1,9 @@
 "use client";
-import { useState, useEffect } from "react";
+
+import { useMounted } from "@/hooks/useMounted";
 
 export default function Footer() {
-  const [hasMounted, setHasMounted] = useState(false);
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
+  const hasMounted = useMounted();
 
   return (
     <footer className={`${hasMounted ? "h-14" : "h-16"} flex items-center justify-center border-t border-black/[0.06] bg-white text-sm text-[#999999]`}>

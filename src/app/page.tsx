@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
+import { useMounted } from "@/hooks/useMounted";
 import { Loader2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -29,8 +30,8 @@ export default function Home() {
   const [enReps, setEnReps] = useState(DEFAULT_EN_REPS);
   const [voiceJp, setVoiceJp] = useState(VOICE_JP_DEFAULT);
   const [voiceEn, setVoiceEn] = useState(VOICE_EN_DEFAULT);
-  const [hasMounted, setHasMounted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const hasMounted = useMounted();
 
   const { translate, isTranslating } = useTranslation();
   const { exportMP4, isExporting, progress } = useVideoExport();
@@ -70,10 +71,6 @@ export default function Home() {
     voiceJp,
     voiceEn,
   });
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
 
   const handleTranslate = async () => {
     const translated = await translate(jpText);
