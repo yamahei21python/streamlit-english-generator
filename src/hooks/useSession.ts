@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import type { SentencePair } from '@/lib/types';
 import type { SessionPhase } from '@/lib/types';
+import { TIMING } from '@/lib/constants';
 
 interface UseSessionProps {
   sentencePairs: SentencePair[];
@@ -96,7 +97,7 @@ export function useSession({
     setCurrentRep(rep);
 
     if (rep === 1 && currentPhase === 'jp') {
-      await wait(2000);
+      await wait(TIMING.initialDelay);
       if (!isPlayingRef.current) return;
     }
 
@@ -106,23 +107,23 @@ export function useSession({
     setCompletedRep(rep);
 
     if (rep < maxReps) {
-      await wait(800);
+      await wait(TIMING.repGap);
       runSession(index, currentPhase, rep + 1);
     } else if (currentPhase === 'jp') {
-      await wait(800);
+      await wait(TIMING.repGap);
       if (!isPlayingRef.current) return;
       setCompletedRep(0);
       runSession(index, 'en', 1);
     } else {
-      await wait(800);
+      await wait(TIMING.repGap);
       setCompletedIndex(index + 1);
       setCompletedRep(0);
 
       if (index + 1 < sentencePairs.length) {
-        await wait(800);
+        await wait(TIMING.repGap);
         runSession(index + 1, 'jp', 1);
       } else {
-        await wait(1000);
+        await wait(TIMING.sentenceGap);
         if (isPlayingRef.current) {
           setIsPlaying(false);
           isPlayingRef.current = false;

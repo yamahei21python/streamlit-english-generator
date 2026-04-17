@@ -13,7 +13,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { useSession } from "@/hooks/useSession";
 import { useVideoExport } from "@/hooks/useVideoExport";
 import type { SentencePair } from "@/lib/types";
-import type { VideoSentenceSegment } from "@/lib/video/video-generator";
+import { buildVideoSegments } from "@/lib/buildSegments";
 import {
   DEFAULT_JP_TEXT,
   DEFAULT_EN_TEXT,
@@ -81,41 +81,12 @@ export default function Home() {
 
   const handleExport = async () => {
     if (sentencePairs.length === 0) return;
-
-    const segments: VideoSentenceSegment[] = [];
-    for (let i = 0; i < sentencePairs.length; i++) {
-      const pair = sentencePairs[i];
-
-      // Phase 1: Japanese (current pair)
-      segments.push({
-        type: 'jp',
-        jp: pair.jp,
-        en: pair.en,
-        audioUrl: `/api/tts?text=${encodeURIComponent(pair.jp)}&voice=${voiceJp}`
-      });
-
-      // Silence (wait time) - Match the 2.4s thinking time in runSession
-      segments.push({ type: 'silence', jp: pair.jp, en: pair.en, duration: 2400 });
-
-      // Phase 2: English (n repeats)
-      for (let r = 0; r < enReps; r++) {
-        segments.push({
-          type: 'en',
-          jp: pair.jp,
-          en: pair.en,
-          audioUrl: `/api/tts?text=${encodeURIComponent(pair.en)}&voice=${voiceEn}`
-        });
-        if (r < enReps - 1) {
-          segments.push({ type: 'silence', jp: pair.jp, en: pair.en, duration: 1000 });
-        }
-      }
-
-      // Gap between sentences
-      if (i < sentencePairs.length - 1) {
-        segments.push({ type: 'silence', jp: pair.jp, en: pair.en, duration: 1500 });
-      }
-    }
-
+    const segments = buildVideoSegments({
+      sentencePairs,
+      voiceJp,
+      voiceEn,
+      enReps,
+    });
     await exportMP4(segments);
   };
 

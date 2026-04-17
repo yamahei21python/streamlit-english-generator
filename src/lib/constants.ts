@@ -30,3 +30,13 @@ export const VIDEO = {
   bitrate: 2_500_000,
   audioBitrate: 128_000,
 } as const;
+
+// Session timing (ms)
+export const TIMING = {
+  initialDelay: 2000,
+  repGap: 800,
+  interPhraseGap: 800,
+  sentenceGap: 1500,
+  silenceAfterJp: 2400,
+  silenceBetweenEn: 1000,
+} as const;
