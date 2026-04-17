@@ -21,3 +21,12 @@ export const DEFAULT_EN_TEXT = "How long have you been working here?\nWhat time 
 
 export const DEFAULT_JP_REPS = 1;
 export const DEFAULT_EN_REPS = 3;
+
+// Video defaults
+export const VIDEO = {
+  width: 1280,
+  height: 720,
+  fps: 30,
+  bitrate: 2_500_000,
+  audioBitrate: 128_000,
+} as const;

@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import type { SentencePair } from "@/lib/types";
 import type { SessionPhase } from "@/lib/types";
+import ProgressBar from "./ProgressBar";
 
 interface SessionDisplayProps {
   isPlaying: boolean;
@@ -55,34 +56,17 @@ export default function SessionDisplay({
 
       <div className="mt-12 w-full flex flex-col gap-4">
         <div className="mb-6">
-          <div className="flex justify-between text-[10px] font-bold uppercase tracking-wider tabular-nums text-[#999999] mb-1.5">
-            <span>Overall Progress</span>
-            <span>Sentence {isPlaying ? currentIndex + 1 : completedIndex} / {sentencePairs.length}</span>
-          </div>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-[#f5f5f5]">
-            <motion.div
-              className="h-full bg-[#262626]"
-              initial={{ width: 0 }}
-              animate={{ width: sentencePairs.length > 0 ? `${(completedIndex / sentencePairs.length) * 100}%` : "0%" }}
-              transition={{ duration: 0.5 }}
-            />
-          </div>
+          <ProgressBar
+            label="Overall Progress"
+            value={isPlaying ? currentIndex + 1 : completedIndex}
+            max={sentencePairs.length}
+          />
         </div>
-
-        <div>
-          <div className="flex justify-between text-[10px] font-bold uppercase tracking-wider tabular-nums text-[#999999] mb-1.5">
-            <span>{isPlaying ? (phase === "jp" ? "Japanese" : "English") : "Japanese"} Phase</span>
-            <span>Repeat {isPlaying ? currentRep : 0} / {isPlaying ? (phase === "jp" ? jpReps : enReps) : jpReps}</span>
-          </div>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-[#f5f5f5]">
-            <motion.div
-              className="h-full bg-[#262626]"
-              initial={{ width: 0 }}
-              animate={{ width: `${(completedRep / Math.max(isPlaying ? (phase === "jp" ? jpReps : enReps) : 1, 1)) * 100}%` }}
-              transition={{ duration: 0.5 }}
-            />
-          </div>
-        </div>
+        <ProgressBar
+          label={isPlaying ? (phase === "jp" ? "Japanese" : "English") : "Japanese"}
+          value={isPlaying ? currentRep : 0}
+          max={isPlaying ? (phase === "jp" ? jpReps : enReps) : jpReps}
+        />
       </div>
     </div>
   );

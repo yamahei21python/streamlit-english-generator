@@ -1,4 +1,5 @@
 import { Output, Mp4OutputFormat, BufferTarget, CanvasSource, AudioBufferSource } from 'mediabunny';
+import { VIDEO } from '@/lib/constants';
 
 export interface VideoSentenceSegment {
   type: 'jp' | 'en' | 'silence';
@@ -22,9 +23,9 @@ export class VideoGenerator {
   private onProgress?: (progress: number) => void;
 
   constructor(options: VideoGenOptions = {}) {
-    this.width = options.width || 1280;
-    this.height = options.height || 720;
-    this.fps = options.fps || 30;
+    this.width = options.width || VIDEO.width;
+    this.height = options.height || VIDEO.height;
+    this.fps = options.fps || VIDEO.fps;
     this.onProgress = options.onProgress;
   }
 
@@ -99,14 +100,14 @@ export class VideoGenerator {
 
     const videoSource = new CanvasSource(canvas, {
       codec: 'avc',
-      bitrate: 2_500_000,
+      bitrate: VIDEO.bitrate,
     });
     output.addVideoTrack(videoSource);
 
     // 4. Setup Audio Source
     const audioSource = new AudioBufferSource({
       codec: 'aac',
-      bitrate: 128_000,
+      bitrate: VIDEO.audioBitrate,
     });
     output.addAudioTrack(audioSource);
 
